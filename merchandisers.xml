@@ -1,0 +1,33 @@
+<merchandisers>
+    <merchandiser>
+        <name>Александр Миронюк</name>
+        <email>miron.alikc@gmail.com</email>
+        <files>
+            <file>/home/winter/Projects/java/emailbroadcaster/Днепропетровск Вольф Татьяна Николаевна План Работ.xls</file>
+            <file>/home/winter/Projects/java/emailbroadcaster/Николаев. Иванова Кристина Николаевна  План Работ.xls</file>
+        </files>
+    </merchandiser>
+
+    <!--<recipient>
+        <name>Антон Буяков </name>
+        <email>buiakov79@gmail.com</email>
+        <files>
+            <file>/home/winter/Projects/java/emailbroadcaster/pom.xml</file>
+            <file>/home/winter/Projects/java/emailbroadcaster/result_email_text.txt</file>
+        </files>
+    </recipient>-->
+
+    <merchandiser>
+        <name>Саша Данченко</name>
+        <email>aldanchenko@gmail.com</email>
+        <files>
+            <file>/home/winter/Projects/java/emailbroadcaster/Днепропетровск Вольф Татьяна Николаевна План Работ.xls</file>
+            <file>/home/winter/Projects/java/emailbroadcaster/Николаев. Иванова Кристина Николаевна  План Работ.xls</file>
+            <!--<file>/home/winter/Projects/java/emailbroadcaster/Миронюк Александр Валерьевич Харьков.ods</file>-->
+            <!--<file>/home/winter/Projects/java/emailbroadcaster/Данченко Александр Николаевич Писаревка.ods</file>-->
+            <!--<file>/home/winter/Projects/java/emailbroadcaster/pom.xml</file>-->
+            <!--<file>/home/winter/Projects/java/emailbroadcaster/result_email_text.txt</file>-->
+            <!--<file>/home/winter/Projects/java/emailbroadcaster/freemarker_template.ftl</file>-->
+        </files>
+    </merchandiser>
+</merchandisers>

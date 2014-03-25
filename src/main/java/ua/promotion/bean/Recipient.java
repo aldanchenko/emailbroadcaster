@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Simple merchandiser class.
+ * Simple Recipient(merchandiser) class.
  *
  * @author aldanchenko
  */

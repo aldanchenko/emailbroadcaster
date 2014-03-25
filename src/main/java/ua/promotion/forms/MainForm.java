@@ -8,6 +8,7 @@ import org.xml.sax.SAXException;
 import ua.promotion.BroadcasterFileReader;
 import ua.promotion.EmailSender;
 import ua.promotion.bean.Recipient;
+import ua.promotion.util.I18Support;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -31,6 +32,16 @@ public class MainForm implements PropertyChangeListener {
      * Default logger.
      */
     private static final Logger logger = Logger.getLogger(MainForm.class);
+
+    /**
+     * 'Name' template parameter.
+     */
+    public static final String NAME_TEMPLATE_PARAMETER = "name";
+
+    /**
+     * Email properties file name.
+     */
+    public static final String EMAIL_PROPERTIES_FILE_NAME = "email.properties";
 
     private JTextArea templateTextArea;
     private JPanel panel1;
@@ -56,37 +67,6 @@ public class MainForm implements PropertyChangeListener {
                 task.execute();
             }
         });
-    }
-
-    /**
-     * Generate email text string using template from input and name parameter from
-     * merchandisers.xml file.
-     *
-     * @param templateText - source template
-     * @param name         - name parameter for template
-     *
-     * @return String (text of email)
-     */
-    private String processTemplateText(String templateText, String name) {
-        try {
-            Template template = new Template("name",
-                    new StringReader(templateText),
-                    new Configuration());
-
-            Map<String, Object> parameters = new HashMap<>();
-
-            parameters.put("name", name);
-
-            StringWriter stringWriter = new StringWriter();
-
-            template.process(parameters, stringWriter);
-
-            return stringWriter.toString();
-        } catch (IOException | TemplateException exception) {
-            logger.error(exception.getMessage());
-        }
-
-        return null;
     }
 
     /**
@@ -117,9 +97,10 @@ public class MainForm implements PropertyChangeListener {
 
             sendButton.setEnabled(true);
 
-            statusLabel.setText("Отправлено");
+            String message = I18Support.getMessage("main.form.done");
 
-            consoleTextArea.append("Отправлено.\n");
+            statusLabel.setText(message);
+            consoleTextArea.append(message + "\n");
         }
 
         @Override
@@ -127,9 +108,9 @@ public class MainForm implements PropertyChangeListener {
             setProgress(0);
 
             consoleTextArea.setText("");
-            consoleTextArea.append("Отправляю...\n");
+            consoleTextArea.append(I18Support.getMessage("main.form.sending") + "\n");
 
-            logger.info("Отправляю...");
+            logger.info(I18Support.getMessage("main.form.sending"));
 
             final StringBuilder errorsStringBuilder = new StringBuilder();
 
@@ -137,21 +118,21 @@ public class MainForm implements PropertyChangeListener {
             Properties emailProperties = null;
 
             try {
-                recipients = BroadcasterFileReader.loadMerchandisers("merchandisers.xml");
+                recipients = BroadcasterFileReader.loadMerchandisers("merchandisers.xml"); // TODO: remove hardcode name and replace it with some more flexible.
 
-                emailProperties = BroadcasterFileReader.loadEmailProperties("email.properties");
+                emailProperties = BroadcasterFileReader.loadEmailProperties(EMAIL_PROPERTIES_FILE_NAME);
             } catch (IOException | SAXException exception) {
                 errorsStringBuilder.append(exception.getMessage()).append(".");
 
                 exception.printStackTrace();
 
-                logger.info("Ошибка: " + exception.getMessage());
+                logger.info(I18Support.getMessage("main.form.error", exception.getMessage()));
             }
 
             if (recipients == null) {
-                statusLabel.setText("Проблемы при чтении файла merchandisers.xml.");
+                statusLabel.setText(I18Support.getMessage("main.form.error.read.recipients.file"));
 
-                logger.info("Проблемы при чтении файла merchandisers.xml.");
+                logger.info(I18Support.getMessage("main.form.error.read.recipients.file"));
 
                 throw new RuntimeException("merchandisers list is null!");
             }
@@ -172,7 +153,8 @@ public class MainForm implements PropertyChangeListener {
                         subjectTextField.getText(),
                         processTemplateText(templateTextArea.getText(), merchandiserName));
 
-                consoleTextArea.append("Отправлено " + merchandiserName + "\n");
+                consoleTextArea.append(I18Support.getMessage("main.form.done")
+                        + " " + merchandiserName + "\n");
 
                 progress++;
 
@@ -184,10 +166,41 @@ public class MainForm implements PropertyChangeListener {
 
                 consoleTextArea.append(errorsStringBuilder.toString() + "\n");
             } else {
-                statusLabel.setText("Отправлено \n");
+                statusLabel.setText(I18Support.getMessage("main.form.done") + "\n");
             }
 
-            logger.info("Отправлено");
+            logger.info(I18Support.getMessage("main.form.done"));
+
+            return null;
+        }
+
+        /**
+         * Generate email text string using template from input and name parameter from
+         * merchandisers.xml file.
+         *
+         * @param templateText - source template
+         * @param name         - name parameter for template
+         *
+         * @return String (text of email)
+         */
+        private String processTemplateText(String templateText, String name) {
+            try {
+                Template template = new Template(NAME_TEMPLATE_PARAMETER,
+                        new StringReader(templateText),
+                        new Configuration());
+
+                Map<String, Object> parameters = new HashMap<>();
+
+                parameters.put(NAME_TEMPLATE_PARAMETER, name);
+
+                StringWriter stringWriter = new StringWriter();
+
+                template.process(parameters, stringWriter);
+
+                return stringWriter.toString();
+            } catch (IOException | TemplateException exception) {
+                logger.error(exception.getMessage());
+            }
 
             return null;
         }
@@ -202,7 +215,7 @@ public class MainForm implements PropertyChangeListener {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                JFrame frame = new JFrame("MainForm");
+                JFrame frame = new JFrame(I18Support.getMessage("main.form.title"));
                 frame.setContentPane(new MainForm().panel1);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.pack();

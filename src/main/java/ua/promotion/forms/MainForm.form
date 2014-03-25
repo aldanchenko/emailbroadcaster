@@ -31,7 +31,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="Отправить"/>
+          <text resource-bundle="localization" key="main.form.send"/>
         </properties>
       </component>
       <component id="2f644" class="javax.swing.JTextField" binding="subjectTextField">
@@ -59,7 +59,7 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="Шаблон письма"/>
+          <text resource-bundle="localization" key="main.form.email.template"/>
         </properties>
       </component>
       <component id="b7df6" class="javax.swing.JLabel">
@@ -68,7 +68,8 @@
           <forms/>
         </constraints>
         <properties>
-          <text value="Тема письма"/>
+          <labelFor value="2f644"/>
+          <text resource-bundle="localization" key="main.form.email.subject"/>
         </properties>
       </component>
       <component id="a3d71" class="javax.swing.JProgressBar" binding="progressBar">

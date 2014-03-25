@@ -27,6 +27,9 @@ import java.util.Properties;
  */
 public class MainForm implements PropertyChangeListener {
 
+    /**
+     * Default logger.
+     */
     private static final Logger logger = Logger.getLogger(MainForm.class);
 
     private JTextArea templateTextArea;
@@ -37,6 +40,9 @@ public class MainForm implements PropertyChangeListener {
     private JProgressBar progressBar;
     private JTextArea consoleTextArea;
 
+    /**
+     * Default constructor.
+     */
     public MainForm() {
         sendButton.addActionListener(new ActionListener() {
 
@@ -48,108 +54,19 @@ public class MainForm implements PropertyChangeListener {
                 SendEmailTask task = new SendEmailTask();
                 task.addPropertyChangeListener(MainForm.this);
                 task.execute();
-
-//                logger.info("Отправляю...");
-//
-//                SwingUtilities.invokeLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        indeterminateProgressBar.setVisible(true);
-//
-//                        statusLabel.setText("Отправляю...");
-//                    }
-//                });
-//
-//                final StringBuilder errorsStringBuilder = new StringBuilder();
-//
-//                SwingUtilities.invokeLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        List<Recipient> merchandisers = null;
-//                        Properties emailProperties = null;
-//
-//                        try {
-//                            merchandisers = BroadcasterFileReader.loadMerchandisers("merchandisers.xml");
-//
-//                            emailProperties = BroadcasterFileReader.loadEmailProperties("email.properties");
-//                        } catch (IOException e1) {
-//                            errorsStringBuilder.append(e1.getMessage()).append(".");
-//
-//                            e1.printStackTrace();
-//
-//                            logger.info("Ошибка: " + e1.getMessage());
-//                        } catch (SAXException e1) {
-//                            errorsStringBuilder.append(e1.getMessage()).append(".");
-//
-//                            e1.printStackTrace();
-//
-//                            logger.info("Ошибка: " + e1.getMessage());
-//                        }
-//
-//                        if (merchandisers == null) {
-//                            SwingUtilities.invokeLater(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    statusLabel.setText("Проблемы при чтении файла merchandisers.xml.");
-//                                }
-//                            });
-//
-//                            logger.info("Проблемы при чтении файла merchandisers.xml.");
-//
-//                            throw new RuntimeException("merchandisers list is null!");
-//                        }
-//
-//                        EmailSender emailSender = new EmailSender(emailProperties);
-//
-//                        progressBar.setMinimum(0);
-//                        progressBar.setMaximum(merchandisers.size());
-//
-//                        int progress = 0;
-//
-//                        for (Recipient merchandiser : merchandisers) {
-//                            emailSender.sendEmailWithAttachment(merchandiser.getEmail(),
-//                                    merchandiser.getFiles(),
-//                                    subjectTextField.getText(),
-//                                    processTemplateText(templateTextArea.getText(), merchandiser.getName()));
-//
-//                            progress++;
-//
-//                            progressBar.setValue(progress);
-//                        }
-//                    }
-//                });
-//
-//                SwingUtilities.invokeLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (errorsStringBuilder.length() > 0) {
-//                            statusLabel.setText(errorsStringBuilder.toString());
-//                        } else {
-//                            statusLabel.setText("Отправлено");
-//                        }
-//
-//                        indeterminateProgressBar.setVisible(false);
-//                    }
-//                });
-//
-//                logger.info("Отправлено");
             }
         });
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JFrame frame = new JFrame("MainForm");
-                frame.setContentPane(new MainForm().panel1);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.pack();
-                frame.setVisible(true);
-            }
-        });
-    }
-
+    /**
+     * Generate email text string using template from input and name parameter from
+     * merchandisers.xml file.
+     *
+     * @param templateText - source template
+     * @param name         - name parameter for template
+     *
+     * @return String (text of email)
+     */
     private String processTemplateText(String templateText, String name) {
         try {
             Template template = new Template("name",
@@ -165,18 +82,21 @@ public class MainForm implements PropertyChangeListener {
             template.process(parameters, stringWriter);
 
             return stringWriter.toString();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } catch (TemplateException e1) {
-            e1.printStackTrace();
+        } catch (IOException | TemplateException exception) {
+            logger.error(exception.getMessage());
         }
 
         return null;
     }
 
+    /**
+     * Listener for progress bar of email sending.
+     *
+     * @param evt - source event
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if ("progress" == evt.getPropertyName()) {
+        if ("progress".equals(evt.getPropertyName())) {
             int progress = (Integer) evt.getNewValue();
 
             progressBar.setIndeterminate(false);
@@ -186,7 +106,8 @@ public class MainForm implements PropertyChangeListener {
     }
 
     /**
-     *
+     * {@link javax.swing.SwingWorker} extension task for sending email.
+     * All real work is hear.
      */
     private class SendEmailTask extends SwingWorker<Void, Void> {
 
@@ -219,18 +140,12 @@ public class MainForm implements PropertyChangeListener {
                 recipients = BroadcasterFileReader.loadMerchandisers("merchandisers.xml");
 
                 emailProperties = BroadcasterFileReader.loadEmailProperties("email.properties");
-            } catch (IOException e1) {
-                errorsStringBuilder.append(e1.getMessage()).append(".");
+            } catch (IOException | SAXException exception) {
+                errorsStringBuilder.append(exception.getMessage()).append(".");
 
-                e1.printStackTrace();
+                exception.printStackTrace();
 
-                logger.info("Ошибка: " + e1.getMessage());
-            } catch (SAXException e1) {
-                errorsStringBuilder.append(e1.getMessage()).append(".");
-
-                e1.printStackTrace();
-
-                logger.info("Ошибка: " + e1.getMessage());
+                logger.info("Ошибка: " + exception.getMessage());
             }
 
             if (recipients == null) {
@@ -276,5 +191,23 @@ public class MainForm implements PropertyChangeListener {
 
             return null;
         }
+    }
+
+    /**
+     * Main method.
+     *
+     * @param args - source console arguments.
+     */
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                JFrame frame = new JFrame("MainForm");
+                frame.setContentPane(new MainForm().panel1);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.pack();
+                frame.setVisible(true);
+            }
+        });
     }
 }

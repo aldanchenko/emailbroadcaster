@@ -13,14 +13,12 @@ import java.util.Properties;
 /**
  * Simple XML parser.
  *
- * @author winter
+ * @author aldanchenko
  */
 public class BroadcasterFileReader {
 
     /**
      * Load Email properties.
-     *
-     * TODO: add more description.
      *
      * @param fileName - path to file
      *

@@ -1,7 +1,6 @@
 package ua.promotion;
 
 import org.apache.log4j.Logger;
-import sun.misc.IOUtils;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -9,23 +8,49 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
 
 /**
- * TODO: under construction.
+ * Class for send emails with several attachments.
+ *
+ * @author aldanchenko
  */
 public class EmailSender {
 
+    /**
+     * Default logger for this class.
+     */
     private static final Logger logger = Logger.getLogger(EmailSender.class);
 
+    /**
+     * Contains email properties for smtp/pop3 connections.
+     */
     private Properties emailProperties;
 
+    /**
+     * Default email encoding.
+     */
     //       private String ENCODE="koi8-r";
     private String ENCODE="Cp1251"; //windows-1251
 
+    /**
+     * Default constructor.
+     *
+     * @param properties - email properties
+     */
+    public EmailSender(Properties properties) {
+        this.emailProperties = properties;
+    }
+
+    /**
+     * Send email with several attachments.
+     *
+     * @param emailRecipient - recipient
+     * @param attachments    - list of attachments
+     * @param emailSubject   - subject
+     * @param emailText      - text
+     */
     public void sendEmailWithAttachment(String emailRecipient, List<String> attachments,
                                         String emailSubject, String emailText) {
         Session session = Session.getInstance(emailProperties, null);
@@ -95,6 +120,13 @@ public class EmailSender {
         }
     }
 
+    /**
+     * Send email without attachments.
+     *
+     * @param emailRecipient - recipient
+     * @param emailSubject   - subject
+     * @param emailText      - text
+     */
     public void sendEmail(String emailRecipient, String emailSubject, String emailText){
         Session session = Session.getInstance(emailProperties, null);
         session.setDebug(true);
@@ -137,17 +169,5 @@ public class EmailSender {
 
             logger.error(ex.getMessage());
         }
-    }
-
-    public EmailSender(Properties properties) {
-        this.emailProperties = properties;
-    }
-
-    public static void main(String[] args) {
-//        EmailSender emailSender = new EmailSender("dev.danchenko@gmail.com", "aldanchenko@gmail.com");
-
-//        List<Recipient> merchandisers = emailSender.loadMerchandisers("merchandisers.xml");
-
-//        emailSender.sendEmail("Тестируем почту");
     }
 }

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Simple merchandiser class.
  *
- * @author winter
+ * @author aldanchenko
  */
 public class Recipient {
     private String name;

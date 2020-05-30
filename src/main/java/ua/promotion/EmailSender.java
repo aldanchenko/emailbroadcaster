@@ -31,7 +31,6 @@ public class EmailSender {
     /**
      * Default email encoding.
      */
-    //       private String ENCODE="koi8-r";
     private String ENCODE="Cp1251"; //windows-1251
 
     /**
@@ -59,7 +58,7 @@ public class EmailSender {
         MimeMessage mimeMessage = new MimeMessage(session);
 
         try {
-            InternetAddress recipients[] = new InternetAddress[]{new InternetAddress(emailRecipient)};
+            InternetAddress[] recipients = new InternetAddress[]{new InternetAddress(emailRecipient)};
 
             String fromMailUser = (String) emailProperties.get("mail.user");
 
@@ -75,18 +74,18 @@ public class EmailSender {
             MimeBodyPart textBodyPart = new MimeBodyPart();
             textBodyPart.setText(emailText, ENCODE);
 
-            // create the Multipart and add its parts to it
+            // Create the Multipart and add its parts to it.
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(textBodyPart);
 
-            // attach the file to the message
+            // Attach the file to the message.
             for (String attachment : attachments) {// create the second message part
                 MimeBodyPart fileBodyPart = new MimeBodyPart();
 
                 FileDataSource fileDataSource = new FileDataSource(attachment);
                 fileBodyPart.setDataHandler(new DataHandler(fileDataSource));
                 fileBodyPart.setHeader("Content-Type", "");
-//                fileBodyPart.setFileName(fileDataSource.getName());
+                //fileBodyPart.setFileName(fileDataSource.getName());
                 fileBodyPart.setFileName(MimeUtility.decodeText(fileDataSource.getName()));
 
                 multipart.addBodyPart(fileBodyPart);

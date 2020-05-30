@@ -74,11 +74,11 @@ public class EmailSender {
             MimeBodyPart textBodyPart = new MimeBodyPart();
             textBodyPart.setText(emailText, ENCODE);
 
-            // create the Multipart and add its parts to it
+            // Create the Multipart and add its parts to it.
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(textBodyPart);
 
-            // attach the file to the message
+            // Attach the file to the message.
             for (String attachment : attachments) {// create the second message part
                 MimeBodyPart fileBodyPart = new MimeBodyPart();
 

@@ -12,7 +12,7 @@ public class Recipient {
     private String name;
     private String email;
 
-    private List<String> files = new ArrayList<String>(); // Move to other place.
+    private List<String> files = new ArrayList<>();
 
     public String getName() {
         return name;

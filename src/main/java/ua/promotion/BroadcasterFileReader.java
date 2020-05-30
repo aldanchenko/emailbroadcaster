@@ -22,7 +22,7 @@ public class BroadcasterFileReader {
      *
      * @param fileName - path to file
      *
-     * @throws IOException
+     * @throws IOException  -
      *
      * @return Properties
      */
@@ -39,8 +39,8 @@ public class BroadcasterFileReader {
      *
      * @param xmlName - source XML file name
      *
-     * @throws IOException
-     * @throws SAXException
+     * @throws IOException      -
+     * @throws SAXException     -
      *
      * @return List<Recipient>
      */

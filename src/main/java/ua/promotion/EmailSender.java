@@ -114,8 +114,8 @@ public class EmailSender {
             System.out.print("" + ex.hashCode());
 
             logger.error(ex.getMessage());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        } catch (UnsupportedEncodingException exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -163,11 +163,11 @@ public class EmailSender {
             ex.printStackTrace();
 
             logger.error(ex.getMessage());
-        } catch (MessagingException ex) {
-            ex.printStackTrace();
-            System.out.print("" + ex.hashCode());
+        } catch (MessagingException exception) {
+            exception.printStackTrace();
+            System.out.print("" + exception.hashCode());
 
-            logger.error(ex.getMessage());
+            logger.error(exception.getMessage());
         }
     }
 }

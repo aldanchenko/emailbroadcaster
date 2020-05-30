@@ -22,7 +22,7 @@ public class BroadcasterFileReader {
      *
      * @param fileName - path to file
      *
-     * @throws IOException
+     * @throws IOException - can throw IO exception if file not exists or some other case
      *
      * @return Properties
      */
@@ -39,8 +39,8 @@ public class BroadcasterFileReader {
      *
      * @param xmlName - source XML file name
      *
-     * @throws IOException
-     * @throws SAXException
+     * @throws IOException  - can throw IO exception if file not exists or some other case
+     * @throws SAXException - can throw SAX exception if XML not valid
      *
      * @return List<Recipient>
      */

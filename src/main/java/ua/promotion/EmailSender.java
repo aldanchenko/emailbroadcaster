@@ -31,7 +31,6 @@ public class EmailSender {
     /**
      * Default email encoding.
      */
-    //       private String ENCODE="koi8-r";
     private String ENCODE="Cp1251"; //windows-1251
 
     /**
@@ -59,7 +58,7 @@ public class EmailSender {
         MimeMessage mimeMessage = new MimeMessage(session);
 
         try {
-            InternetAddress recipients[] = new InternetAddress[]{new InternetAddress(emailRecipient)};
+            InternetAddress[] recipients = new InternetAddress[]{new InternetAddress(emailRecipient)};
 
             String fromMailUser = (String) emailProperties.get("mail.user");
 
@@ -86,7 +85,7 @@ public class EmailSender {
                 FileDataSource fileDataSource = new FileDataSource(attachment);
                 fileBodyPart.setDataHandler(new DataHandler(fileDataSource));
                 fileBodyPart.setHeader("Content-Type", "");
-//                fileBodyPart.setFileName(fileDataSource.getName());
+                //fileBodyPart.setFileName(fileDataSource.getName());
                 fileBodyPart.setFileName(MimeUtility.decodeText(fileDataSource.getName()));
 
                 multipart.addBodyPart(fileBodyPart);
@@ -127,6 +126,7 @@ public class EmailSender {
      * @param emailSubject   - subject
      * @param emailText      - text
      */
+    @Deprecated
     public void sendEmail(String emailRecipient, String emailSubject, String emailText){
         Session session = Session.getInstance(emailProperties, null);
         session.setDebug(true);
@@ -134,11 +134,11 @@ public class EmailSender {
         MimeMessage mimeMessage = new MimeMessage(session);
 
         try {
-            InternetAddress recipients[] = new InternetAddress[]{new InternetAddress(emailRecipient)};
+            InternetAddress[] recipients = new InternetAddress[]{new InternetAddress(emailRecipient)};
 
             String fromMailUser = (String) emailProperties.get("mail.user");
 
-            mimeMessage.setFrom(new InternetAddress(fromMailUser)); //FIXME
+            mimeMessage.setFrom(new InternetAddress(fromMailUser));
 
             mimeMessage.setRecipients(Message.RecipientType.TO, recipients);
             mimeMessage.setSubject(emailSubject, ENCODE);
